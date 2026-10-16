@@ -1,0 +1,7 @@
+*.tar.gz
+*.tgz
+*.zip
+node_modules/
+.DS_Store
+credentials.json
+.tensor-forge/
