@@ -17,7 +17,7 @@ jobs:
         run: |
           set -euo pipefail
           test "$(gh api repos/$GH_REPO --jq .visibility)" = public
-          test "$(gh api repos/$GH_REPO/releases/tags/v0.1.0-dev.30 --jq .draft)" = true
+          test "$(gh release view v0.1.0-dev.30 --json isDraft --jq .isDraft)" = true
           mkdir transfer
           cd transfer
           cat > SHA256SUMS <<'EOF'
