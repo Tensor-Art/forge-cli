@@ -2,7 +2,7 @@
 
 Forge CLI (`tensor-forge`) operates Forge canvases, nodes, media and generation runs from a terminal or a terminal-capable Agent. This repository distributes installers and release packages; development source is maintained separately.
 
-Version **0.1.0-dev.29** is available for:
+Version **0.1.0-dev.30** is available for:
 
 | System | Architecture | Installer |
 | --- | --- | --- |
@@ -22,12 +22,12 @@ Run this in Terminal. The installer selects the package for your Mac's processor
   installer=$(mktemp)
   trap 'rm -f "$installer"' EXIT
   curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
-    https://github.com/Tensor-Art/forge-cli/releases/download/v0.1.0-dev.29/install-forge-cli.sh \
+    https://github.com/Tensor-Art/forge-cli/releases/download/v0.1.0-dev.30/install-forge-cli.sh \
     -o "$installer"
   printf '%s  %s\n' 4df428045361f8ac92dfd2ed7e36faf1ea130003cbdc0f55b89083c0c83c25e5 "$installer" \
     | shasum -a 256 -c -
   bash "$installer" --manifest-url \
-    https://github.com/Tensor-Art/forge-cli/releases/download/v0.1.0-dev.29/channel.json \
+    https://github.com/Tensor-Art/forge-cli/releases/download/v0.1.0-dev.30/channel.json \
     --skip-auth-check
 ) && export PATH="$HOME/.local/bin:$PATH"
 ```
@@ -43,11 +43,11 @@ $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 $installer = Join-Path ([IO.Path]::GetTempPath()) ('forge-cli-' + [Guid]::NewGuid().ToString('N') + '.ps1')
 try {
-    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/Tensor-Art/forge-cli/releases/download/v0.1.0-dev.29/install-forge-cli.ps1' -OutFile $installer
+    Invoke-WebRequest -UseBasicParsing -Uri 'https://github.com/Tensor-Art/forge-cli/releases/download/v0.1.0-dev.30/install-forge-cli.ps1' -OutFile $installer
     if ((Get-FileHash -LiteralPath $installer -Algorithm SHA256).Hash.ToLowerInvariant() -ne 'bb392143ffebcb4b8ad52eef46d23effd885adf6e0eef79639f90597d6e0c592') {
         throw 'Forge CLI installer SHA256 mismatch.'
     }
-    & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -ExecutionPolicy Bypass -File $installer -ManifestUrl 'https://github.com/Tensor-Art/forge-cli/releases/download/v0.1.0-dev.29/channel.json' -SkipAuthCheck
+    & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -ExecutionPolicy Bypass -File $installer -ManifestUrl 'https://github.com/Tensor-Art/forge-cli/releases/download/v0.1.0-dev.30/channel.json' -SkipAuthCheck
     if ($LASTEXITCODE -ne 0) { throw "Forge CLI installation failed (exit $LASTEXITCODE)." }
     $env:PATH = (Join-Path $env:LOCALAPPDATA 'tensor-forge\bin') + ';' + $env:PATH
 } finally {
@@ -105,7 +105,9 @@ Forge CLI uses the MIT license. The CLI and runtime archives include their respe
 
 ## 中文说明
 
-dev.29 提供 macOS 苹果芯片、macOS Intel 和 Windows x64 安装包。安装器优先复用兼容的 Node.js 22/24，否则自动下载精简 Node.js 22；用户无需自行安装 Node，也无需 GitHub 账号、npm 或管理员权限。
+dev.30 提供 macOS 苹果芯片、macOS Intel 和 Windows x64 安装包。安装器优先复用兼容的 Node.js 22/24，否则自动下载精简 Node.js 22；用户无需自行安装 Node，也无需 GitHub 账号、npm 或管理员权限。
+
+本版强化配套 Skill 的测试分流检查：请求前核对用户指定的版本，新终端、重试和任务恢复继续携带当前任务分流，不将 `test-e` 设为固定默认。升级后运行 `tensor-forge skills sync` 更新 Agent 的 Skill。
 
 macOS 使用上方 Shell 命令，Windows 使用上方 PowerShell 命令。安装后运行 `tensor-forge skills sync` 安装配套操作 Skill，再执行 `tensor-forge auth login --environment tensor` 完成浏览器授权。Access Key 仍可通过 `--stdin` 登录，凭据保存到系统凭据库。
 
